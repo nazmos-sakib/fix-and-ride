@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fix&Ride - Labor Services</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+  <header id="home" class="container">
+    <div class="container">
+      <h1>Fix&Ride</h1>
+      <nav>
+        <div class="hamburger" id="hamburger">
+          ☰
+        </div>
+        <ul id="nav-links" class="nav-links">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#bio">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="cart">
+        <img src="assets/icons/cart.svg" alt="Cart" />
+        <span id="cart-count">0</span>
+      </div>
+    </div>
+  </header>
+
+  <section id="hero" class="container">
+    <div class="slideshow">
+      <img id="hero-image" src="assets/images/service1.png" alt="Service Slide" />
+      <div class="caption" id="hero-caption">Car + Driver for Small Moves</div>
+    </div>
+  </section>
+
+  <section id="bio" class="container">
+    <h2>👋 Hey There! I'm Nazmos, Your Local Fix-it-All!</h2>
+    <p>
+      I’m not just a guy with tools, I’m your reliable helper with wheels, skills, and muscle.
+      I have a valid driving license, my own car, and I’m trained in woodwork, plumbing, kitchen
+      and furniture setup. Whether you're moving across the city or just need a quick fix,
+      I bring the tools and the `can do` attitude.
+    </p>
+    <p>
+      Book me like you shop online, easy, fast, and reliable.
+    </p>
+  </section>
+
+  <section id="services" class="container">
+  <h2>🛒 Choose Your Service</h2>
+
+  <div class="carousel-wrapper">
+    <button class="carousel-arrow left-arrow" id="left-arrow">&#8592;</button>
+    
+    <div class="carousel-container">
+      <div class="carousel-track" id="carousel-track">
+
+        <div class="service-card" data-service-id="1">
+          <img src="assets/images/service1.png" alt="Car + Labor" class="service-img" />
+          <h3>1. Car + Labor</h3>
+          <p>I drive my own car and help you move small stuff or transport you.</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="service-card" data-service-id="2">
+          <img src="assets/images/service2.jpg" alt="Labor + Transporter" class="service-img" />
+          <h3>2. Labor + Transporter</h3>
+          <p>I drive a hired transporter. You pay the transporter separately.</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="service-card" data-service-id="3">
+          <img src="assets/images/service3.jpg" alt="Labor Only" class="service-img" />
+          <h3>3. Labor Only (Moving)</h3>
+          <p>Heavy lifting, loading/unloading, stairs — I do it all!</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="service-card" data-service-id="4">
+          <img src="assets/images/service4.png" alt="Repairs & Installations" class="service-img" />
+          <h3>4. Repairs & Installations</h3>
+          <p>Kitchen, furniture, closets, plumbing — I bring the tools, you get the fix!</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="service-card" data-service-id="5">
+          <img src="assets/images/service5.jpg" alt="Tool Lending" class="service-img" />
+          <h3>5. Tool Lending</h3>
+          <p>Need tools but not the labor? Rent my professional-grade tools for your own DIY projects.</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="carousel-arrow right-arrow" id="right-arrow">&#8594;</button>
+  </div>
+</section>
+
+
+  <section id="contact" class="container">
+    <h2>📬 Contact Me</h2>
+    <p>Need help or have a question? Reach out any time!</p>
+    <form id="contact-form">
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Fix&Ride. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
