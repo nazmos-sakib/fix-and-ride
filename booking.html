@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buchung</title>
+  <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+
+
+  <header class="container sticky-header">
+    <h1 style="text-align: center;">📅 Book Your Service</h1>
+  </header>
+
+  <div class="service-container">
+    <div class="service-header">
+      <img id="service-image" src="" alt="Service Image">
+      <h2 id="service-name"></h2>
+      <p id="service-description"></p>
+    </div>
+  </div>
+
+
+  <!-- Booking Header -->
+  <div class="booking-header">
+    <div class="date-time-btn" id="begin-btn" role="button" tabindex="0" aria-label="Beginn wählen">
+      <span id="start-day">morgen</span>
+      <span id="start-time">--:--</span>
+    </div>
+    <div class="date-time-btn" id="end-btn" role="button" tabindex="0" aria-label="Ende wählen">
+      <span id="end-day">morgen</span>
+      <span id="end-time">--:--</span>
+    </div>
+    
+  </div>
+
+ <!-- Availability Chart -->
+  <section class="availability-chart-section">
+    <h3>Verfügbarkeit (Stundenübersicht)</h3>
+    <canvas id="availabilityChart" height="100"></canvas>
+  </section>
+
+  <!-- Modal: Calendar + Time slots -->
+  <div class="calendar-wrapper" id="calendar-modal" aria-hidden="true">
+    <div style="margin-top: 120px;">
+    <div class="calendar-popup" role="dialog" aria-modal="true" aria-labelledby="month-year">
+      <div class="calendar-header">
+        <button id="prev-month" class="nav-btn" aria-label="Vorheriger Monat">‹</button>
+        <span id="month-year" class="month-year">Monat Jahr</span>
+        <button id="next-month" class="nav-btn" aria-label="Nächster Monat">›</button>
+      </div>
+
+      <table class="calendar" aria-label="Kalender">
+        <thead>
+          <tr>
+            <th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th>
+          </tr>
+        </thead>
+        <tbody id="calendar-body"></tbody>
+      </table>
+
+      <div class="time-slot-container">
+        <h4>Uhrzeit wählen</h4>
+        <ul id="time-slots" class="time-slots" aria-label="Zeitslots"></ul>
+      </div>
+
+      <button id="close-calendar" class="close-btn">Schließen</button>
+    </div></div>
+  </div>
+
+
+
+
+
+
+  <div class="service-container">
+    <button class="confirm-btn" id="confirm-btn">Confirm Booking</button>
+    <a href="index.html" class="back-link">⬅ Back to Services</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="./js/booking.js"></script>
+</body>
+</html>
