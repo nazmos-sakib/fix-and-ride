@@ -23,7 +23,10 @@
       </nav>
 
       <div class="cart">
-        <img src="assets/icons/cart.svg" alt="Cart" />
+        <button id="login-btn" class="login-btn">
+          <img src="assets/icons/account.png" alt="Login" />
+        </button>
+        <img src="assets/icons/cart.png" alt="Cart" />
         <span id="cart-count">0</span>
       </div>
     </div>
@@ -112,6 +115,68 @@
       <button type="submit">Send Message</button>
     </form>
   </section>
+
+
+
+  <!-- Login/Signup Modal -->
+  <div id="auth-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="close-auth">&times;</span>
+      <div class="modal-tabs">
+        <button id="tab-login" class="active left-round-border">Login</button>
+        <button id="tab-signup" class="right-round-border">Signup</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form">
+        <label>Email</label>
+        <div class="form-row">
+          <input type="email" id="login-email" required> 
+        </div>
+        <label>Password</label>
+        <div class="form-row">
+          <input type="password" id="login-password" required>
+        </div>
+        <button type="submit" class="auth-submit">Login</button>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="signup-form" class="auth-form hidden">
+        <div class="form-row">
+          <input type="text" id="first-name" placeholder="First Name" required>
+          <input type="text" id="last-name" placeholder="Last Name" required>
+        </div>
+
+        <div class="form-row">
+          <input type="text" id="address" placeholder="Address" required>
+          <input type="text" id="house-number" placeholder="House No." required>
+        </div>
+
+        <div class="form-row">
+          <input type="text" id="post" placeholder="Post" required>
+          <input type="text" id="city" placeholder="City" required>
+        </div>
+
+        <div class="form-row">
+          <input type="email" id="signup-email" placeholder="Email" required>
+        </div>
+
+        <div class="form-row">
+          <input type="password" id="signup-password" placeholder="Password" required>
+          <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
+        </div>
+
+        <div class="form-row terms">
+          <input type="checkbox" id="terms-checkbox">
+          <label for="terms-checkbox">I agree to the Terms and Conditions</label>
+        </div>
+
+        <button type="submit" class="auth-submit" id="signup-submit" disabled>Signup</button>
+      </form>
+    </div>
+  </div>
+
+
 
   <footer>
     <div class="container">
