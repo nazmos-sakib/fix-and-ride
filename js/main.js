@@ -5,7 +5,7 @@ const heroImages = [
   { src: "assets/images/service3.jpg", caption: "Labor Only - Moving Help" },
   { src: "assets/images/service4.png", caption: "Repairs & Installations" },
   { src: "assets/images/service5.jpg", caption: "Tool Lending" }
-];
+  ];
 
 let currentSlide = 0;
 const heroImg = document.getElementById("hero-image");
@@ -46,10 +46,10 @@ hamburger.addEventListener("click", (e) => {
 // Close nav when clicking outside
 document.addEventListener("click", (e) => {
   if (navLinks.classList.contains("show") &&
-      !navLinks.contains(e.target) &&
-      !hamburger.contains(e.target)) {
+    !navLinks.contains(e.target) &&
+    !hamburger.contains(e.target)) {
     navLinks.classList.remove("show");
-  }
+}
 });
 
 // Close nav when clicking a link
@@ -74,7 +74,7 @@ rightArrow.addEventListener('click', () => {
   track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
 });
 
-
+//login-signup-----------------------------
 // Modal controls
 const loginBtn = document.getElementById("login-btn");
 const authModal = document.getElementById("auth-modal");
@@ -85,6 +85,8 @@ const loginForm = document.getElementById("login-form");
 const signupForm = document.getElementById("signup-form");
 const termsCheckbox = document.getElementById("terms-checkbox");
 const signupSubmit = document.getElementById("signup-submit");
+
+const API = "http://localhost:8080";
 
 // Open modal
 loginBtn.addEventListener("click", () => {
@@ -123,11 +125,10 @@ termsCheckbox.addEventListener("change", () => {
 });
 
 // Persistent storage signup
-signupForm.addEventListener("submit", (e) => {
+signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const firstName = document.getElementById("first-name").value.trim();
-  const lastName = document.getElementById("last-name").value.trim();
-  const email = document.getElementById("signup-email").value.trim();
+
+  const userEmail = document.getElementById("signup-email").value.trim();
   const pass = document.getElementById("signup-password").value;
   const confirm = document.getElementById("signup-confirm").value;
 
@@ -136,35 +137,116 @@ signupForm.addEventListener("submit", (e) => {
     return;
   }
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  if (users.find(u => u.email === email)) {
-    alert("Email already registered!");
+
+  const body = {
+    firstName : document.getElementById("first-name").value.trim(),
+    lastName : document.getElementById("last-name").value.trim(),
+    address : document.getElementById("address").value.trim(),
+    houseNo : document.getElementById("house-number").value.trim(),
+    post : document.getElementById("post").value.trim(),
+    city : document.getElementById("city").value.trim(),
+    email : userEmail,
+    password : pass
+  
+  };
+
+  const res = await fetch(`${API}/api/auth/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    let errorMessage = `res-status ${res.status} -> `;
+    let responseBody = await res.text(); // read ONCE
+
+    try {
+      const errorData = JSON.parse(responseBody);
+      if (errorData.error) {
+      // case: { "error": "Bad credentials: ..." }
+        errorMessage += errorData.error;
+      } else if (errorData.message) {
+      // case: { "message": "Something else" }
+        errorMessage += errorData.message;
+      } else {
+      // case: { "houseNo": "must not be blank", "email": "must not be blank" }
+      // Collect all field errors
+        const fieldErrors = Object.entries(errorData)
+                    .map(([field, msg]) => `${field}: ${msg}`)
+                    .join("\n");
+        errorMessage += fieldErrors;
+      }
+    } catch (e) {
+      // if not valid JSON, just show raw text
+      if (responseBody) errorMessage += responseBody;
+    }
+
+    alert(errorMessage);
     return;
   }
-
-  users.push({ firstName, lastName, email, pass });
-  localStorage.setItem("users", JSON.stringify(users));
   alert("Signup successful! You can now log in.");
   tabLogin.click();
 });
 
-// Persistent storage login
-loginForm.addEventListener("submit", (e) => {
+
+
+//   login
+loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("login-email").value.trim();
-  const pass = document.getElementById("login-password").value;
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u => u.email === email && u.pass === pass);
+  const body = {
+    email: document.getElementById("login-email").value.trim(),
+    password: document.getElementById("login-password").value
+  };
 
-  if (!user) {
-    alert("Invalid credentials!");
-    return;
+  const res = await fetch(`${API}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    let errorMessage = `res-status ${res.status} -> `;
+    let responseBody = await res.text(); // read ONCE
+
+    try {
+      const errorData = JSON.parse(responseBody);
+      if (errorData.error) {
+      errorMessage += errorData.error; // will contain your "Bad credentials: ..."
+    } else if (errorData.message) {
+      errorMessage += errorData.message; // fallback if some other error
+    } else {
+      // handle field-level errors (map of field → message)
+      const fieldErrors = Object.entries(errorData)
+        .map(([field, msg]) => `${field}: ${msg}`)
+        .join("\n");
+      errorMessage += fieldErrors;
+    }
+  } catch (e) {
+    // if not valid JSON, just show raw text
+    if (responseBody) errorMessage += responseBody;
   }
 
-  localStorage.setItem("loggedInUser", JSON.stringify(user));
-  alert(`Welcome back, ${user.firstName}!`);
-  authModal.style.display = "none";
-  loginBtn.textContent = user.firstName; // show name instead of "Login"
+  alert(errorMessage);
+  return;
+}
+
+const data = await res.json();
+
+localStorage.setItem('token', data.token);
+localStorage.setItem('loggedInUser', JSON.stringify(data.user));
+
+alert(`Welcome back, ${data.user.username}!`);
+authModal.style.display = "none";
+loginBtn.textContent = data.user.username;
 });
 
+// example of calling a protected endpoint:
+async function whoAmI() {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API}/api/auth/me`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  const data = await res.json();
+  console.log('You are:', data.username);
+}
