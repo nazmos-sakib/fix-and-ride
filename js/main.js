@@ -1,10 +1,11 @@
 // Hero slideshow
 const heroImages = [
-  { src: "assets/images/service1.png", caption: "Car + Driver for Small Moves" },
+  { src: "assets/images/service4.png", caption: "Car + Driver for Small Moves" },
   { src: "assets/images/service2.jpg", caption: "Driving Transporter for Heavy Loads" },
   { src: "assets/images/service3.jpg", caption: "Labor Only - Moving Help" },
-  { src: "assets/images/service4.png", caption: "Repairs & Installations" },
-  { src: "assets/images/service5.jpg", caption: "Tool Lending" }
+  { src: "assets/images/service7.jpg", caption: "Repairs & Installations" },
+  { src: "assets/images/service5.jpg", caption: "Tool Lending" },
+  { src: "assets/images/service6.png", caption: "Taxi Service" }
   ];
 
 let currentSlide = 0;
@@ -86,7 +87,10 @@ const signupForm = document.getElementById("signup-form");
 const termsCheckbox = document.getElementById("terms-checkbox");
 const signupSubmit = document.getElementById("signup-submit");
 
-const API = "http://localhost:8080";
+//const API = "http://localhost:8080";
+//const API = "http://192.168.1.132:32215";
+const API = "http://192.168.0.166:31080";
+
 
 // Open modal
 loginBtn.addEventListener("click", () => {

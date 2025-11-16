@@ -2,7 +2,7 @@
 const services = {
   "car-labor": {
     name: "Car + Labor",
-    image: "assets/images/service1.png",
+    image: "assets/images/service4.png",
     description: "I drive my own car and help you move small stuff or transport you."
   },
   "labor-transporter": {
@@ -17,7 +17,7 @@ const services = {
   },
   "repairs": {
     name: "Repairs & Installations",
-    image: "assets/images/service4.png",
+    image: "assets/images/service7.jpg",
     description: "Kitchen, furniture, closets, plumbing — I bring the tools, you get the fix!"
   },
   "tool-lending": {
@@ -27,7 +27,7 @@ const services = {
   },
   "taxi": {
     name: "Taxi Service",
-    image: "assets/images/service6.jpg",
+    image: "assets/images/service6.png",
     description: "Emergency pickup or drop-off — I can get you there quickly and safely."
   }
 };
