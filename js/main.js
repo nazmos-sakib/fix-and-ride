@@ -86,11 +86,69 @@ const loginForm = document.getElementById("login-form");
 const signupForm = document.getElementById("signup-form");
 const termsCheckbox = document.getElementById("terms-checkbox");
 const signupSubmit = document.getElementById("signup-submit");
+ 
+//const API = "http://192.168.1.114:9090/api/auth/user";
+const API = "http://localhost:9090/api/auth/user";
 
-//const API = "http://localhost:8080";
-//const API = "http://192.168.1.132:32215";
-const API = "http://192.168.0.166:31080";
+// Store access token in memory (not localStorage, safer)
+let accessToken = null;
+let username = null;
 
+// Helper: automatically attach access token to protected calls
+async function apiFetch(url, options = {}) {
+    options.headers = options.headers || {};
+    if (accessToken) {
+        options.headers["Authorization"] = "Bearer " + accessToken;
+    }
+
+    let response = await fetch(url, options);
+
+    // If access token expired → try refresh
+    if (response.status === 401) {
+        const refreshed = await tryRefreshToken();
+        if (!refreshed) {
+            console.log("Refresh failed. Logging out.");
+            accessToken = null;
+            showLoginUI();
+            return response;
+        }
+
+        // Retry original request
+        options.headers["Authorization"] = "Bearer " + accessToken;
+        response = await fetch(url, options);
+    }
+
+    return response;
+}
+
+// === Attempt refresh using httpOnly cookie ===
+async function tryRefreshToken() {
+    try {
+
+    console.log("calling api");
+        const res = await fetch(API + "/refresh", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: "include"  // IMPORTANT! allows cookies
+        });
+
+        if (!res.ok) return false;
+
+        const data = await res.json();
+        if ("accessToken" in data) {
+            console.log("accesstoken not given");
+            return false
+        }
+        accessToken = data.accessToken;
+        username = data.user.username
+        console.log("Token refreshed");
+        return true;
+    } catch {
+        return false;
+    }
+}
 
 // Open modal
 loginBtn.addEventListener("click", () => {
@@ -154,7 +212,7 @@ signupForm.addEventListener("submit", async (e) => {
   
   };
 
-  const res = await fetch(`${API}/api/auth/signup`, {
+  const res = await fetch(`${API}/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -203,7 +261,7 @@ loginForm.addEventListener("submit", async (e) => {
     password: document.getElementById("login-password").value
   };
 
-  const res = await fetch(`${API}/api/auth/login`, {
+  const res = await fetch(`${API}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -235,10 +293,12 @@ loginForm.addEventListener("submit", async (e) => {
   return;
 }
 
+//storing JWT token
 const data = await res.json();
 
-localStorage.setItem('token', data.token);
-localStorage.setItem('loggedInUser', JSON.stringify(data.user));
+accessToken = data.accessToken;
+//localStorage.setItem('token', data.token);
+//localStorage.setItem('loggedInUser', JSON.stringify(data.user));
 
 alert(`Welcome back, ${data.user.username}!`);
 authModal.style.display = "none";
@@ -254,3 +314,42 @@ async function whoAmI() {
   const data = await res.json();
   console.log('You are:', data.username);
 }
+
+// === Load user profile ===
+async function me() {
+    const res = await apiFetch(API + "/me");
+
+    if (!res.ok) {
+        console.warn("Not authenticated");
+        return;
+    }
+
+    const data = await res.json();
+    //document.getElementById("welcome").innerText = "Welcome, " + data.username;
+}
+
+// === Logout ===
+async function logout() {
+    await apiFetch(API + "/logout", {method: "POST"});
+    accessToken = null;
+    showLoginUI();
+}
+
+
+// === AUTO-LOGIN on page load ===
+(async function init() {
+    console.log("Checking session...");
+
+    // Try refresh token → automatically login
+    const refreshed = await tryRefreshToken();
+
+    if (refreshed) {
+        //showUserUI();
+        //await me();
+
+        authModal.style.display = "none";
+        loginBtn.textContent = data.user.username;
+    } else {
+        //showLoginUI();
+    }
+})();
