@@ -87,7 +87,8 @@ const signupForm = document.getElementById("signup-form");
 const termsCheckbox = document.getElementById("terms-checkbox");
 const signupSubmit = document.getElementById("signup-submit");
  
-const API = "http://192.168.1.114:9090/api/auth/user";
+const API = "https://eilene-gastroenterological-ike.ngrok-free.dev/api/auth/user";
+//const API = "http://192.168.1.114:9090/api/auth/user";
 //const API = "http://localhost:9090/api/auth/user";
 
 // Store access token in memory (not localStorage, safer)
