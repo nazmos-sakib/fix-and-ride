@@ -87,9 +87,9 @@ const signupForm = document.getElementById("signup-form");
 const termsCheckbox = document.getElementById("terms-checkbox");
 const signupSubmit = document.getElementById("signup-submit");
  
-const API = "https://thallous-pellucidly-delilah.ngrok-free.dev/api/auth/user";
+//const API = "https://thallous-pellucidly-delilah.ngrok-free.dev/api/auth/user";
 //const API = "http://192.168.1.114:9090/api/auth/user";
-//const API = "http://localhost:9090/api/auth/user";
+const API = "https://localhost:9090/api/auth/user";
 
 // Store access token in memory (not localStorage, safer)
 let accessToken = null;
@@ -126,13 +126,11 @@ async function apiFetch(url, options = {}) {
 async function tryRefreshToken() {
     try {
 
-    console.log("calling api");
+    //console.log("calling api");
         const res = await fetch(API + "/refresh", {
             method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: "include"  // IMPORTANT! allows cookies
+            credentials: "include",
+            mode: "cors"
         });
 
         if (!res.ok) return false;
@@ -265,6 +263,7 @@ loginForm.addEventListener("submit", async (e) => {
   const res = await fetch(`${API}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: "include",
     body: JSON.stringify(body)
   });
 
