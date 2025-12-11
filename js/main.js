@@ -136,9 +136,9 @@ async function tryRefreshToken() {
         if (!res.ok) return false;
 
         const data = await res.json();
-        if ("accessToken" in data) {
-            console.log("accesstoken not given");
-            return false
+        if (!data.accessToken || !data.user) {
+            console.log("Refresh response missing required fields");
+            return false;
         }
         accessToken = data.accessToken;
         username = data.user.username
@@ -348,7 +348,7 @@ async function logout() {
         //await me();
 
         authModal.style.display = "none";
-        loginBtn.textContent = data.user.username;
+        loginBtn.textContent = username;
     } else {
         //showLoginUI();
     }
