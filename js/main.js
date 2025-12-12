@@ -6,7 +6,7 @@ const heroImages = [
   { src: "assets/images/service7.jpg", caption: "Repairs & Installations" },
   { src: "assets/images/service5.jpg", caption: "Tool Lending" },
   { src: "assets/images/service6.png", caption: "Taxi Service" }
-  ];
+];
 
 let currentSlide = 0;
 const heroImg = document.getElementById("hero-image");
@@ -50,7 +50,7 @@ document.addEventListener("click", (e) => {
     !navLinks.contains(e.target) &&
     !hamburger.contains(e.target)) {
     navLinks.classList.remove("show");
-}
+  }
 });
 
 // Close nav when clicking a link
@@ -86,7 +86,8 @@ const loginForm = document.getElementById("login-form");
 const signupForm = document.getElementById("signup-form");
 const termsCheckbox = document.getElementById("terms-checkbox");
 const signupSubmit = document.getElementById("signup-submit");
- 
+
+// API
 //const API = "https://thallous-pellucidly-delilah.ngrok-free.dev/api/auth/user";
 //const API = "http://192.168.1.114:9090/api/auth/user";
 const API = "https://localhost:9090/api/auth/user";
@@ -94,59 +95,63 @@ const API = "https://localhost:9090/api/auth/user";
 // Store access token in memory (not localStorage, safer)
 let accessToken = null;
 let username = null;
+let user = null;
 
 // Helper: automatically attach access token to protected calls
 async function apiFetch(url, options = {}) {
-    options.headers = options.headers || {};
-    if (accessToken) {
-        options.headers["Authorization"] = "Bearer " + accessToken;
+  options.headers = options.headers || {};
+  if (accessToken) {
+    options.headers["Authorization"] = "Bearer " + accessToken;
+  }
+
+  let response = await fetch(url, options);
+
+  // If access token expired → try refresh
+  if (response.status === 401) {
+    const refreshed = await tryRefreshToken();
+    if (!refreshed) {
+      console.log("Refresh failed. Logging out.");
+      accessToken = null;
+      updateUserUI(null);
+      return response;
     }
 
-    let response = await fetch(url, options);
+    // Retry original request
+    options.headers["Authorization"] = "Bearer " + accessToken;
+    response = await fetch(url, options);
+  }
 
-    // If access token expired → try refresh
-    if (response.status === 401) {
-        const refreshed = await tryRefreshToken();
-        if (!refreshed) {
-            console.log("Refresh failed. Logging out.");
-            accessToken = null;
-            showLoginUI();
-            return response;
-        }
-
-        // Retry original request
-        options.headers["Authorization"] = "Bearer " + accessToken;
-        response = await fetch(url, options);
-    }
-
-    return response;
+  return response;
 }
 
 // === Attempt refresh using httpOnly cookie ===
 async function tryRefreshToken() {
-    try {
+  try {
+    const res = await fetch(API + "/refresh", {
+      method: "POST",
+      credentials: "include",
+      mode: "cors"
+    });
 
-    //console.log("calling api");
-        const res = await fetch(API + "/refresh", {
-            method: "POST",
-            credentials: "include",
-            mode: "cors"
-        });
+    if (!res.ok) return false;
 
-        if (!res.ok) return false;
-
-        const data = await res.json();
-        if (!data.accessToken || !data.user) {
-            console.log("Refresh response missing required fields");
-            return false;
-        }
-        accessToken = data.accessToken;
-        username = data.user.username
-        console.log("Token refreshed");
-        return true;
-    } catch {
-        return false;
+    const data = await res.json();
+    if (!data.accessToken || !data.user) {
+      console.log("Refresh response missing required fields");
+      return false;
     }
+    accessToken = data.accessToken;
+    username = data.user.username;
+    user = data.user;
+    
+    // Store in localStorage for UI
+    localStorage.setItem('loggedInUser', JSON.stringify(data.user));
+    
+    console.log("Token refreshed");
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 // Open modal
@@ -198,17 +203,15 @@ signupForm.addEventListener("submit", async (e) => {
     return;
   }
 
-
   const body = {
-    firstName : document.getElementById("first-name").value.trim(),
-    lastName : document.getElementById("last-name").value.trim(),
-    address : document.getElementById("address").value.trim(),
-    houseNo : document.getElementById("house-number").value.trim(),
-    post : document.getElementById("post").value.trim(),
-    city : document.getElementById("city").value.trim(),
-    email : userEmail,
-    password : pass
-  
+    firstName: document.getElementById("first-name").value.trim(),
+    lastName: document.getElementById("last-name").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    houseNo: document.getElementById("house-number").value.trim(),
+    post: document.getElementById("post").value.trim(),
+    city: document.getElementById("city").value.trim(),
+    email: userEmail,
+    password: pass
   };
 
   const res = await fetch(`${API}/signup`, {
@@ -224,21 +227,16 @@ signupForm.addEventListener("submit", async (e) => {
     try {
       const errorData = JSON.parse(responseBody);
       if (errorData.error) {
-      // case: { "error": "Bad credentials: ..." }
         errorMessage += errorData.error;
       } else if (errorData.message) {
-      // case: { "message": "Something else" }
         errorMessage += errorData.message;
       } else {
-      // case: { "houseNo": "must not be blank", "email": "must not be blank" }
-      // Collect all field errors
         const fieldErrors = Object.entries(errorData)
-                    .map(([field, msg]) => `${field}: ${msg}`)
-                    .join("\n");
+          .map(([field, msg]) => `${field}: ${msg}`)
+          .join("\n");
         errorMessage += fieldErrors;
       }
     } catch (e) {
-      // if not valid JSON, just show raw text
       if (responseBody) errorMessage += responseBody;
     }
 
@@ -249,9 +247,7 @@ signupForm.addEventListener("submit", async (e) => {
   tabLogin.click();
 });
 
-
-
-//   login
+// Login
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -269,87 +265,164 @@ loginForm.addEventListener("submit", async (e) => {
 
   if (!res.ok) {
     let errorMessage = `res-status ${res.status} -> `;
-    let responseBody = await res.text(); // read ONCE
+    let responseBody = await res.text();
 
     try {
       const errorData = JSON.parse(responseBody);
       if (errorData.error) {
-      errorMessage += errorData.error; // will contain your "Bad credentials: ..."
-    } else if (errorData.message) {
-      errorMessage += errorData.message; // fallback if some other error
-    } else {
-      // handle field-level errors (map of field → message)
-      const fieldErrors = Object.entries(errorData)
-        .map(([field, msg]) => `${field}: ${msg}`)
-        .join("\n");
-      errorMessage += fieldErrors;
+        errorMessage += errorData.error;
+      } else if (errorData.message) {
+        errorMessage += errorData.message;
+      } else {
+        const fieldErrors = Object.entries(errorData)
+          .map(([field, msg]) => `${field}: ${msg}`)
+          .join("\n");
+        errorMessage += fieldErrors;
+      }
+    } catch (e) {
+      if (responseBody) errorMessage += responseBody;
     }
-  } catch (e) {
-    // if not valid JSON, just show raw text
-    if (responseBody) errorMessage += responseBody;
+
+    alert(errorMessage);
+    return;
   }
 
-  alert(errorMessage);
-  return;
-}
+  const data = await res.json();
+  accessToken = data.accessToken;
+  user = data.user;
 
-//storing JWT token
-const data = await res.json();
+  // Store user data
+  localStorage.setItem('loggedInUser', JSON.stringify(data.user));
 
-accessToken = data.accessToken;
-//localStorage.setItem('token', data.token);
-//localStorage.setItem('loggedInUser', JSON.stringify(data.user));
-
-alert(`Welcome back, ${data.user.username}!`);
-authModal.style.display = "none";
-loginBtn.textContent = data.user.username;
+  alert(`Welcome back, ${data.user.username}!`);
+  authModal.style.display = "none";
+  
+  // Update UI
+  updateUserUI(data.user);
+  
+  // Setup dropdown listeners after UI update
+  setupUserMenuListeners();
 });
 
-// example of calling a protected endpoint:
-async function whoAmI() {
-  const token = localStorage.getItem('token');
-  const res = await fetch(`${API}/api/auth/me`, {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-  const data = await res.json();
-  console.log('You are:', data.username);
+// Update user UI
+function updateUserUI(userData) {
+  const loggedInUser = userData || JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+  const loginBtn = document.getElementById('login-btn');
+  const userMenu = document.getElementById('user-menu');
+  const usernameDisplay = document.getElementById('username-display');
+  
+  if (loggedInUser && loggedInUser.username) {
+    // User is logged in
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (userMenu) {
+      userMenu.style.display = 'flex';
+      if (usernameDisplay) {
+        usernameDisplay.textContent = loggedInUser.username;
+      }
+    }
+  } else {
+    // User is not logged in
+    if (loginBtn) loginBtn.style.display = 'flex';
+    if (userMenu) userMenu.style.display = 'none';
+  }
 }
 
-// === Load user profile ===
-async function me() {
-    const res = await apiFetch(API + "/me");
-
-    if (!res.ok) {
-        console.warn("Not authenticated");
-        return;
+// Setup user menu listeners
+function setupUserMenuListeners() {
+  const userAvatar = document.getElementById('user-avatar');
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  const logoutBtn = document.getElementById('logout-btn');
+  
+  if (userAvatar && dropdownMenu) {
+    // Remove any existing listeners first
+    userAvatar.removeEventListener('click', handleUserAvatarClick);
+    document.removeEventListener('click', handleOutsideClick);
+    
+    if (logoutBtn) {
+      logoutBtn.removeEventListener('click', handleLogoutClick);
     }
+    
+    // Add new listeners
+    userAvatar.addEventListener('click', handleUserAvatarClick);
+    document.addEventListener('click', handleOutsideClick);
+    
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', handleLogoutClick);
+    }
+  }
+}
 
-    const data = await res.json();
-    //document.getElementById("welcome").innerText = "Welcome, " + data.username;
+function handleUserAvatarClick(e) {
+  e.stopPropagation();
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  dropdownMenu.classList.toggle('show');
+}
+
+function handleOutsideClick(e) {
+  const userAvatar = document.getElementById('user-avatar');
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  
+  if (dropdownMenu && dropdownMenu.classList.contains('show')) {
+    if (!dropdownMenu.contains(e.target) && !userAvatar.contains(e.target)) {
+      dropdownMenu.classList.remove('show');
+    }
+  }
+}
+
+async function handleLogoutClick(e) {
+  e.preventDefault();
+  await logout();
 }
 
 // === Logout ===
 async function logout() {
-    await apiFetch(API + "/logout", {method: "POST"});
-    accessToken = null;
-    showLoginUI();
+  try {
+    // Call logout API
+    await apiFetch(API + "/logout", {
+      method: "POST",
+      credentials: "include"
+    });
+  } catch (error) {
+    console.log("Logout API call failed:", error);
+  }
+  
+  // Clear local storage
+  localStorage.removeItem('loggedInUser');
+  accessToken = null;
+  username = null;
+  user = null;
+  
+  // Update UI
+  updateUserUI(null);
+  
+  // Hide dropdown if open
+  const dropdownMenu = document.getElementById('dropdown-menu');
+  if (dropdownMenu) {
+    dropdownMenu.classList.remove('show');
+  }
+  
+  // Redirect to home page
+  window.location.href = 'index.html';
 }
-
 
 // === AUTO-LOGIN on page load ===
 (async function init() {
-    console.log("Checking session...");
+  console.log("Checking session...");
 
-    // Try refresh token → automatically login
-    const refreshed = await tryRefreshToken();
+  // Try refresh token → automatically login
+  const refreshed = await tryRefreshToken();
 
-    if (refreshed) {
-        //showUserUI();
-        //await me();
-
-        authModal.style.display = "none";
-        loginBtn.textContent = username;
-    } else {
-        //showLoginUI();
-    }
+  if (refreshed) {
+    // Update UI with user menu
+    const userData = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
+    updateUserUI(userData);
+  } else {
+    // Ensure login button is visible
+    updateUserUI(null);
+  }
+  
+  // Setup user menu listeners
+  setupUserMenuListeners();
+  
+  console.log("Initialization complete");
 })();

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fix&Ride - My Profile</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/profile.css"/>
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <header id="home" class="container">
+    <div class="container">
+      <h1>Fix&Ride</h1>
+      <nav>
+        <div class="hamburger" id="hamburger">
+          ☰
+        </div>
+        <ul id="nav-links" class="nav-links">
+          <li><a href="index.html#hero">Home</a></li>
+          <li><a href="index.html#bio">About</a></li>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+          <li><a href="profile.html" class="active">My Profile</a></li>
+        </ul>
+      </nav>
+
+      <div class="user-menu-container">
+        <div class="user-menu" id="user-menu">
+          <div class="user-avatar" id="user-avatar">
+            <img src="assets/icons/user-avatar.png" alt="User Avatar" />
+            <span id="username-display">Guest</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu">
+            <a href="profile.html">👤 My Profile</a>
+            <a href="bookings.html">📅 My Bookings</a>
+            <a href="settings.html">⚙️ Settings</a>
+            <div class="divider"></div>
+            <a href="#" id="logout-btn">🚪 Logout</a>
+          </div>
+        </div>
+        <div class="cart">
+          <img src="assets/icons/cart.png" alt="Cart" />
+          <span id="cart-count">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <img src="assets/icons/user-avatar-large.png" alt="Profile Avatar" id="profile-avatar-img">
+        <button class="edit-avatar-btn">✏️ Edit</button>
+      </div>
+      <div class="profile-info">
+        <h1 id="profile-name">Nazmos S.</h1>
+        <p class="profile-role">🚗 Your Local Fix-it-All Helper</p>
+        <div class="profile-stats">
+          <div class="stat">
+            <span class="stat-number" id="completed-jobs">47</span>
+            <span class="stat-label">Jobs Completed</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" id="rating">4.8</span>
+            <span class="stat-label">⭐ Rating</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" id="member-since">2023</span>
+            <span class="stat-label">Member Since</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <div class="profile-section">
+        <h2>📋 Personal Information</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Full Name</label>
+            <p id="user-fullname">Nazmos S.</p>
+          </div>
+          <div class="info-item">
+            <label>Email</label>
+            <p id="user-email">nazmos@fixandride.com</p>
+          </div>
+          <div class="info-item">
+            <label>Phone</label>
+            <p id="user-phone">+1 (555) 123-4567</p>
+          </div>
+          <div class="info-item">
+            <label>Address</label>
+            <p id="user-address">123 Main St, City, Country</p>
+          </div>
+          <div class="info-item">
+            <label>Preferred Contact</label>
+            <p id="user-contact-pref">Email & WhatsApp</p>
+          </div>
+          <div class="info-item">
+            <label>Member Status</label>
+            <p class="status-badge active">Active Member</p>
+          </div>
+        </div>
+        <button class="edit-btn" id="edit-personal-btn">Edit Personal Info</button>
+      </div>
+
+      <div class="profile-section">
+        <h2>🔧 My Services</h2>
+        <div class="services-list">
+          <div class="service-badge">🚗 Car + Labor</div>
+          <div class="service-badge">🚚 Labor + Transporter</div>
+          <div class="service-badge">💪 Labor Only</div>
+          <div class="service-badge">🔨 Repairs & Installations</div>
+          <div class="service-badge">🛠️ Tool Lending</div>
+          <div class="service-badge">🚕 Taxi Service</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h2>📅 Upcoming Bookings</h2>
+        <div class="bookings-list">
+          <div class="booking-card">
+            <div class="booking-header">
+              <span class="booking-service">Car + Labor</span>
+              <span class="booking-status confirmed">Confirmed</span>
+            </div>
+            <div class="booking-details">
+              <p>📅 Tomorrow, 10:00 AM - 12:00 PM</p>
+              <p>📍 Small apartment move - Downtown</p>
+            </div>
+          </div>
+          <div class="booking-card">
+            <div class="booking-header">
+              <span class="booking-service">Repairs & Installations</span>
+              <span class="booking-status pending">Pending</span>
+            </div>
+            <div class="booking-details">
+              <p>📅 Friday, 2:00 PM - 4:00 PM</p>
+              <p>📍 Kitchen cabinet installation</p>
+            </div>
+          </div>
+        </div>
+        <a href="bookings.html" class="view-all-btn">View All Bookings →</a>
+      </div>
+
+      <div class="profile-section">
+        <h2>⭐ Reviews & Ratings</h2>
+        <div class="reviews">
+          <div class="review-card">
+            <div class="review-header">
+              <span class="reviewer">Sarah M.</span>
+              <span class="review-rating">⭐⭐⭐⭐⭐</span>
+            </div>
+            <p class="review-text">"Nazmos was amazing! Helped me move furniture quickly and efficiently."</p>
+            <span class="review-date">2 days ago</span>
+          </div>
+          <div class="review-card">
+            <div class="review-header">
+              <span class="reviewer">John D.</span>
+              <span class="review-rating">⭐⭐⭐⭐</span>
+            </div>
+            <p class="review-text">"Great service for kitchen installation. Very professional!"</p>
+            <span class="review-date">1 week ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Fix&Ride. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

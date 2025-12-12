@@ -23,12 +23,28 @@
         </ul>
       </nav>
 
-      <div class="cart">
-        <button id="login-btn" class="login-btn">
-          <img src="assets/icons/account.png" alt="Login" />
-        </button>
-        <img src="assets/icons/cart.png" alt="Cart" />
-        <span id="cart-count">0</span>
+      <div class="user-menu-container">
+        <div class="user-menu" id="user-menu" style="display: none;">
+          <div class="user-avatar" id="user-avatar">
+            <img src="assets/icons/account.png" alt="User Avatar" />
+            <span id="username-display">User</span>
+            <span class="dropdown-arrow">▼</span>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu">
+            <a href="profile.html">👤 My Profile</a>
+            <a href="my-bookings.html">📅 My Bookings</a>
+            <a href="settings.html">⚙️ Settings</a>
+            <div class="divider"></div>
+            <a href="#" id="logout-btn">🚪 Logout</a>
+          </div>
+        </div>
+        <div class="cart">
+          <button id="login-btn" class="login-btn">
+            <img src="assets/icons/account.png" alt="Login" />
+          </button>
+          <img src="assets/icons/cart.png" alt="Cart" />
+          <span id="cart-count">0</span>
+        </div>
       </div>
     </div>
   </header>

@@ -5,6 +5,4 @@ DIR="./"
 BIND="0.0.0.0"
 
 echo "Starting Python HTTP server on port  ..."
-python3 -m http.server $PORT --directory "$DIR" --bind "$BIND" \
-	--ssl-cert localhost+2.pem \
-  	--ssl-key localhost+2-key.pem
+python3 -m http.server $PORT --directory "$DIR" --bind "$BIND" 

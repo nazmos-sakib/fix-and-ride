@@ -495,3 +495,206 @@ footer {
     flex-direction: column;
   }
 }
+
+
+/* User Menu Container */
+.user-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* User Menu Styles */
+.user-menu {
+  position: relative;
+}
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  transition: background 0.3s ease;
+}
+
+.user-avatar:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.user-avatar img {
+  width: 24px;
+  height: 24px;
+}
+
+#username-display {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dropdown-arrow {
+  color: white;
+  font-size: 10px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  min-width: 200px;
+  display: none;
+  z-index: 10000; /* Increased z-index */
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  background: white;
+  transition: background 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-menu .divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0;
+}
+
+#logout-btn {
+  color: #e53935;
+  font-weight: bold;
+}
+
+/* Ensure header has proper z-index */
+header {
+  background: #222;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Keep this lower than dropdown */
+  width: 100%;
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust cart position when user menu is shown */
+.user-menu-container .cart {
+  margin-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.login-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .user-menu-container {
+    gap: 10px;
+  }
+  
+  .user-avatar {
+    padding: 5px 10px;
+  }
+  
+  #username-display {
+    font-size: 12px;
+  }
+  
+  .dropdown-menu {
+    position: fixed;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    min-width: auto;
+  }
+}
+
+/* Fix for dropdown positioning */
+header .container {
+  position: relative;
+  z-index: 1001; /* Ensure header is above content but below dropdown */
+}
+
+.user-menu {
+  position: relative;
+  z-index: 10002; /* Higher than header */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  min-width: 200px;
+  display: none;
+  z-index: 10003; /* Highest z-index */
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.dropdown-menu.show {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Make sure nothing else covers the dropdown */
+* {
+  max-height: 1000000px; /* Prevent z-index issues in some browsers */
+}
+
+/* Ensure cart stays visible */
+.cart {
+  position: relative;
+  z-index: 1000;
+}
+
+/* On mobile, adjust dropdown position */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    position: fixed;
+    top: 60px; /* Just below header */
+    right: 10px;
+    left: auto;
+    width: 250px;
+    max-width: calc(100vw - 20px);
+  }
+}
