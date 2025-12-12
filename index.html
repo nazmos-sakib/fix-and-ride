@@ -24,7 +24,7 @@
       </nav>
 
       <div class="user-menu-container">
-        <div class="user-menu" id="user-menu" style="display: none;">
+        <div class="user-menu hidden" id="user-menu">
           <div class="user-avatar" id="user-avatar">
             <img src="assets/icons/account.png" alt="User Avatar" />
             <span id="username-display">User</span>
@@ -51,7 +51,7 @@
 
   <section id="hero" class="container">
     <div class="slideshow">
-      <img id="hero-image" src="assets/images/service1.png" alt="Service Slide" />
+      <img id="hero-image" src="assets/images/service1.png" alt="Service Slide" loading="lazy" />
       <div class="caption" id="hero-caption">Car + Driver for Small Moves</div>
     </div>
   </section>
@@ -73,43 +73,43 @@
     <h2>🛒 Choose Your Service</h2>
 
     <div class="carousel-wrapper">
-      <button class="carousel-arrow left-arrow" id="left-arrow">&#8592;</button>
+      <button class="carousel-arrow left-arrow" id="left-arrow" aria-label="Scroll left">&#8592;</button>
 
       <div class="carousel-container">
         <div class="carousel-track" id="carousel-track">
 
-          <a href="booking.html?service=car-labor" class="service-card">
-            <img src="assets/images/service4.png" alt="Car + Labor" class="service-img" />
+          <a href="booking.html?service=car-labor" class="service-card" data-service-id="car-labor">
+            <img src="assets/images/service4.png" alt="Car + Labor" class="service-img" loading="lazy" />
             <h3>1. Car + Labor</h3>
             <p>I drive my own car and help you move small stuff or transport you.</p>
           </a>
 
-          <a href="booking.html?service=labor-transporter" class="service-card">
-            <img src="assets/images/service2.jpg" alt="Labor + Transporter" class="service-img" />
+          <a href="booking.html?service=labor-transporter" class="service-card" data-service-id="labor-transporter">
+            <img src="assets/images/service2.jpg" alt="Labor + Transporter" class="service-img" loading="lazy" />
             <h3>2. Labor + Transporter</h3>
             <p>I drive a hired transporter. You pay the transporter separately.</p>
           </a>
 
-          <a href="booking.html?service=labor-only" class="service-card">
-            <img src="assets/images/service3.jpg" alt="Labor Only" class="service-img" />
+          <a href="booking.html?service=labor-only" class="service-card" data-service-id="labor-only">
+            <img src="assets/images/service3.jpg" alt="Labor Only" class="service-img" loading="lazy" />
             <h3>3. Labor Only (Moving)</h3>
             <p>Heavy lifting, loading/unloading, stairs — I do it all!</p>
           </a>
 
-          <a href="booking.html?service=repairs" class="service-card">
-            <img src="assets/images/service7.jpg" alt="Repairs & Installations" class="service-img" />
+          <a href="booking.html?service=repairs" class="service-card" data-service-id="repairs">
+            <img src="assets/images/service7.jpg" alt="Repairs & Installations" class="service-img" loading="lazy" />
             <h3>4. Repairs & Installations</h3>
             <p>Kitchen, furniture, closets, plumbing — I bring the tools, you get the fix!</p>
           </a>
 
-          <a href="booking.html?service=tool-lending" class="service-card">
-            <img src="assets/images/service5.jpg" alt="Tool Lending" class="service-img" />
+          <a href="booking.html?service=tool-lending" class="service-card" data-service-id="tool-lending">
+            <img src="assets/images/service5.jpg" alt="Tool Lending" class="service-img" loading="lazy" />
             <h3>5. Tool Lending</h3>
             <p>Need tools but not the labor? Rent my professional-grade tools for your own DIY projects.</p>
           </a>
 
-          <a href="booking.html?service=taxi" class="service-card">
-            <img src="assets/images/service6.png" alt="Taxi Service" class="service-img" />
+          <a href="booking.html?service=taxi" class="service-card" data-service-id="taxi">
+            <img src="assets/images/service6.png" alt="Taxi Service" class="service-img" loading="lazy" />
             <h3>6. Taxi Service</h3>
             <p>Emergency pickup or drop-off — I can get you there quickly and safely.</p>
           </a>
@@ -117,10 +117,9 @@
         </div>
       </div>
 
-      <button class="carousel-arrow right-arrow" id="right-arrow">&#8594;</button>
+      <button class="carousel-arrow right-arrow" id="right-arrow" aria-label="Scroll right">&#8594;</button>
     </div>
   </section>
-
 
   <section id="contact" class="container">
     <h2>📬 Contact Me</h2>
@@ -133,12 +132,10 @@
     </form>
   </section>
 
-
-
   <!-- Login/Signup Modal -->
   <div id="auth-modal" class="modal">
     <div class="modal-content">
-      <span class="close-btn" id="close-auth">&times;</span>
+      <span class="close-btn" id="close-auth" aria-label="Close">&times;</span>
       <div class="modal-tabs">
         <button id="tab-login" class="active left-round-border">Login</button>
         <button id="tab-signup" class="right-round-border">Signup</button>
@@ -193,15 +190,13 @@
     </div>
   </div>
 
-
-
   <footer>
     <div class="container">
       <p>&copy; 2025 Fix&Ride. All rights reserved.</p>
     </div>
   </footer>
 
-  <!--script src="js/main.js?v=${Date.now()}"></script-->
-  <script src="js/main.js"></script>
+  <!-- Main module script: type=module -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
