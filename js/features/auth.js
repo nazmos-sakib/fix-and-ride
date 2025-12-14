@@ -2,7 +2,7 @@
 import { parseErrorResponse } from '../core/utils.js';
 
 export function initAuth(DOM, options = {}) {
-  const API = options.apiBase || 'https://localhost:9090/api/auth/user';
+  const API = options.apiBase || 'https://localhost:9090/api/user/auth';
   let accessToken = null;
   let user = null;
 

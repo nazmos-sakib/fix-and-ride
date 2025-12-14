@@ -1,4 +1,5 @@
 // js/main.js
+import CONFIG from "./config.js";
 import { createDOM } from './core/dom.js';
 import { initSlideshow } from './features/slideshow.js';
 import { initCarousel } from './features/carousel.js';
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cartApi = initCart(DOM);
 
   // Auth must be initialized before userMenu because userMenu uses logout from auth
-  const authApi = initAuth(DOM, { apiBase: 'https://localhost:9090/api/auth/user' });
+  const authApi = initAuth(DOM, { apiBase: `${CONFIG.BASE_URL}/api/user/auth`});
   // attempt to auto-login and attach auth UI after init
   await authApi.init();
 
